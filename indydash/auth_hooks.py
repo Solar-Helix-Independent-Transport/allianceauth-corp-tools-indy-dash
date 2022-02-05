@@ -9,7 +9,7 @@ class IndyDash(MenuItemHook):
 
         MenuItemHook.__init__(self,
                               "Industry Structures",
-                              'far fa-shopping-cart fa-fw',
+                              'fas fa-hammer fa-fw',
                               'indydash:view',
                               navactive=['indydash:'])
 
