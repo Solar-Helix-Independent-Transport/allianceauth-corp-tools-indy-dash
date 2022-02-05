@@ -15,18 +15,31 @@ export const Dashboard = () => {
         accessor: "name",
         Filter: textColumnFilter,
         filter: "text",
+        Cell: (props) => (
+          <div style={{ whiteSpace: "nowrap" }}>
+            {props.value}
+          </div>
+        ),
+
       },
       {
         Header: "Services",
         accessor: "services",
         Filter: textColumnFilter,
         filter: "text",
+        Cell: (props) => (
+          <div>
+            {props.value.split('\n').map(str => <p>{str}</p>)}
+          </div>
+        ),
+
       },
       {
         Header: "Rigs",
         accessor: "rigs",
         Filter: textColumnFilter,
         filter: "text",
+
       },
     ],
     []

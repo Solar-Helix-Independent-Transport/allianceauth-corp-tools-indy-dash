@@ -110,7 +110,7 @@ export const BaseTable = ({
               return true;
             } else {
               const rowValue = row.values[id];
-              return rowValue ? rowValue.includes(filterValue) : false;
+              return rowValue ? rowValue.toLowerCase().includes(filterValue.toLowerCase()) : false;
             }
           });
         });
