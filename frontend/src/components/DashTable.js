@@ -29,7 +29,7 @@ export const Dashboard = () => {
         filter: "text",
         Cell: (props) => (
           <div>
-            {props.value.split('\n').map(str => <p>{str}</p>)}
+            {props.value.split('|').map(str => <p>{str}</p>)}
           </div>
         ),
 
@@ -39,6 +39,11 @@ export const Dashboard = () => {
         accessor: "rigs",
         Filter: textColumnFilter,
         filter: "text",
+        Cell: (props) => (
+          <div>
+            {props.value.split('|').map(str => <p>{str}</p>)}
+          </div>
+        ),
 
       },
     ],
