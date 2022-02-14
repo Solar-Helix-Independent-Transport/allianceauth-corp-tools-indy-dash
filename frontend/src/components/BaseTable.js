@@ -1,9 +1,8 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { useTable, useFilters, usePagination } from "react-table";
+import { useTable, useFilters, usePagination, useSortBy } from "react-table";
 import Select from "react-select";
 import { Bars } from "@agney/react-loading";
-
 import {
   ButtonToolbar,
   ButtonGroup,
@@ -12,8 +11,9 @@ import {
   SplitButton,
   Table,
 } from "react-bootstrap";
+import "./BaseTable.css";
 
-const colourStyles = {
+export const colourStyles = {
   option: (styles) => {
     return {
       ...styles,
@@ -60,7 +60,11 @@ export function SelectColumnFilter({
     }
     preFilteredRows.forEach((row) => {
       if (row.values[id] !== null) {
-        options.add(row.values[id]);
+        if (typeof row.values[id] === "object") {
+          options.add(row.values[id]["name"]);
+        } else {
+          options.add(row.values[id]);
+        }
       }
     });
     return [...options.values()];
@@ -109,8 +113,13 @@ export const BaseTable = ({
             if (!filterValue) {
               return true;
             } else {
-              const rowValue = row.values[id];
-              return rowValue ? rowValue.toLowerCase().includes(filterValue.toLowerCase()) : false;
+              let rowValue = row.values[id];
+              if (typeof rowValue === "object") {
+                rowValue = rowValue.name;
+              }
+              return rowValue
+                ? rowValue.toLowerCase().includes(filterValue.toLowerCase())
+                : false;
             }
           });
         });
@@ -143,6 +152,7 @@ export const BaseTable = ({
       initialState: { pageSize: 25 },
     },
     useFilters,
+    useSortBy,
     usePagination
   );
 
@@ -162,7 +172,25 @@ export const BaseTable = ({
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render("Header")}
+                  {/* Add a sort direction indicator */}
+                  <span className="pull-right">
+                    {column.canSort ? (
+                      column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <Glyphicon glyph="sort-by-attributes-alt" />
+                        ) : (
+                          <Glyphicon glyph="sort-by-attributes" />
+                        )
+                      ) : (
+                        <Glyphicon glyph="sort" />
+                      )
+                    ) : (
+                      ""
+                    )}
+                  </span>
+                </th>
               ))}
             </tr>
           ))}

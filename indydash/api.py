@@ -43,18 +43,17 @@ def get_structure_list(request):
         output = []
         for s in strs:
             services = s.structureservice_set.filter(name__in=inc_services).values_list('name', flat=True)
-            services = "|".join(services)
             r = CorpAsset.objects.filter(location_id=s.structure_id, 
                                          location_flag__icontains="rig"
                                          ).values_list('type_name__name', flat=True).distinct()
-            rigs = "|".join(r)
+            
 
             output.append({
                         "system":s.system_name.name,
                         "name":s.name,
                         "type":s.type_name.name,
-                        "services": services,
-                        "rigs": rigs})
+                        "services": list(services),
+                        "rigs": list(r)})
 
         return output
     else:
