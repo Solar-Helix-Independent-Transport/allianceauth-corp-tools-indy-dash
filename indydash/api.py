@@ -35,6 +35,7 @@ def get_structure_list(request):
                         'Invention',
                         'Manufacturing (Standard)',
                         'Manufacturing (Capitals)',
+                        'Manufacturing (Super Capitals)',
                         ]
         corps = models.IndyDashConfiguration.objects.get(pk=1).corporations.all()
         strs = Structure.objects.filter(structureservice__name__in=inc_services,
@@ -46,7 +47,6 @@ def get_structure_list(request):
             r = CorpAsset.objects.filter(location_id=s.structure_id, 
                                          location_flag__icontains="rig"
                                          ).values_list('type_name__name', flat=True).distinct()
-            
 
             output.append({
                         "system":s.system_name.name,

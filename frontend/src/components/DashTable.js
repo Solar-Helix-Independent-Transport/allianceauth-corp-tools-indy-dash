@@ -3,14 +3,20 @@ import { Panel, Label } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { loadDash } from "../apis/Dashboard";
 import { PanelLoader } from "./PanelLoader";
-import { BaseTable, textColumnFilter, colourStyles } from "./BaseTable";
+import { BaseTable, textColumnFilter, colourStyles, SelectColumnFilter } from "./BaseTable";
 import Select from "react-select";
 
 export const Dashboard = () => {
-  const { isLoading, error, data } = useQuery(["dashboard"], () => loadDash());
+  const { isLoading, error, data, isFetching } = useQuery(["dashboard"], () => loadDash());
 
   const columns = React.useMemo(
     () => [
+      {
+        Header: "Type",
+        accessor: "type",
+        Filter: SelectColumnFilter,
+        filter: "includes"
+      },
       {
         Header: "Structure",
         accessor: "name",
@@ -114,7 +120,7 @@ export const Dashboard = () => {
 
   return (
     <Panel.Body>
-      <BaseTable {...{ isLoading, data, columns, error }} />
+      <BaseTable {...{ isLoading, data, columns, error, isFetching }} />
     </Panel.Body>
   );
 };
