@@ -102,7 +102,22 @@ export const Dashboard = () => {
         Header: "Rigs",
         accessor: "rigs",
         Filter: textColumnFilter,
-        filter: "text",
+        filter: (rows, ids, filterValue) => {
+          return rows.filter((row) => {
+            return ids.some((id) => {
+              if (!filterValue) {
+                return true;
+              } else {
+                let rowValue = row.values[id].reduce((p, c) => {
+                  return p + "  " + c;
+                }, "");
+                return rowValue
+                  ? rowValue.toLowerCase().includes(filterValue.toLowerCase())
+                  : false;
+              }
+            });
+          });
+        },
         Cell: (props) => (
           <div>
             {props.value.map(str => <p>{str}</p>)}
