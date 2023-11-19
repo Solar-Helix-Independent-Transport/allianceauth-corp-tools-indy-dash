@@ -3,14 +3,14 @@ import os
 from setuptools import find_packages, setup
 install_requires = [
     'allianceauth>=2.9.0',
-    'allianceauth-corptools>=2.1.0'
+    'allianceauth-corptools>=2.5.5'
 ]
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='allianceauth-indydash',
+    name='allianceauth-corptools-indydash',
     version=__version__,
     packages=find_packages(),
     include_package_data=True,
