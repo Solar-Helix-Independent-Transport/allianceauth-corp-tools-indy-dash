@@ -1,0 +1,99 @@
+{% extends 'allianceauth/base-bs5.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% block page_title %}{% trans "Industry Structures!" %}{% endblock %}
+
+{% block content %}
+
+    {% if structures %}
+        <h1 class="text-center">Available Industrial Structures</h1>
+        <div class="table-responsive">
+            <table id="table-structs" class="table table-responsive ">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Structure</th>
+                        <th>Services</th>
+                        <th>Rigs</th>
+                        <th>System</th>
+                        <th>Constellation</th>
+                        <th>Region</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for structure in structures %}
+                    <tr>
+                        <td >{{ structure.type }}</td>
+                        <td >{{ structure.name }}</td>
+                        <td class="text-center">{% for service in structure.services %}
+                            {% if service.state == 'online' %}
+                                <span class="badge bg-primary">{{ service.name }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ service.name }}</span>
+                            {% endif %}
+                        {% endfor %}</td>
+                        <td class="text-center">
+                            <p>
+                                {% for rig in structure.rigs %}
+                                    {{ rig }}<br/>
+                                {% endfor %}
+                            </p>
+                        </td>
+                        <th >{{ structure.system.name }}</th>
+                        <th >{{ structure.system.constellation.name }}</th>
+                        <th >{{ structure.system.constellation.region.name }}</th>
+                    </tr>
+                {% empty %}
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+    <div class="alert alert-warning text-center">{% trans "No Structures Available" %}</div>
+    {% endif %}
+{% endblock %}
+{% block extra_javascript %}
+    {% include 'bundles/datatables-js-bs5.html' %}
+    <script src="{% static 'allianceauth/js/filterDropDown/filterDropDown.min.js' %}"></script>
+
+{% endblock %}
+{% block extra_script %}
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $(document).ready(function() {
+        $('#table-structs').DataTable({
+            filterDropDown: {
+					columns: [
+                    {
+                        idx: 0
+                    },
+                    {
+                        idx: 4
+                    },
+                    {
+                        idx: 5
+                    },
+                    {
+                        idx: 6
+                    },
+                ],
+            },
+            columnDefs: [
+                //{ "searchable": false, "targets": [0] },
+                { "sortable": false, "targets": [2,3] },
+                //{ "visible": false, "targets": [10, 6, 7, 8, 9] }
+            ],
+            order: [
+                [1, "desc"]
+            ],
+            responsive: true,
+        });
+    });
+{% endblock %}
+{% block extra_css %}
+    {% include 'bundles/datatables-css-bs5.html' %}
+{% endblock %}
