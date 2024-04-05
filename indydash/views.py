@@ -31,10 +31,16 @@ def get_structure_list(request):
                     ]
 
     corps = models.IndyDashConfiguration.objects.get(pk=1).corporations.all()
-    strs = Structure.objects.filter(structureservice__name__in=inc_services,
-                                    structureservice__state="online",
-                                    type_name__group_id__in=inc_groups,
-                                    corporation__corporation__in=corps).distinct()
+    strs = Structure.objects.filter(
+        structureservice__name__in=inc_services,
+        structureservice__state="online",
+        type_name__group_id__in=inc_groups,
+        corporation__corporation__in=corps
+    ).select_related(
+        "system_name",
+        "system_name__constellation",
+        "system_name__constellation__region",
+    ).distinct()
 
     output = []
     for s in strs:
