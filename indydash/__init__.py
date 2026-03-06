@@ -1,2 +1,2 @@
 default_app_config = 'indydash.apps.IndyDashConfig'
-__version__ = "0.0.2"
+__version__ = "1.0.0b1"
