@@ -56,7 +56,7 @@
 {% endblock %}
 {% block extra_javascript %}
     {% include 'bundles/datatables-js-bs5.html' %}
-    <script src="{% static 'allianceauth/js/filterDropDown/filterDropDown.min.js' %}"></script>
+    {% include 'bundles/filterdropdown-js.html' %}
 
 {% endblock %}
 {% block extra_script %}
